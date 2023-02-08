@@ -7,8 +7,8 @@ package vista;
 import config.conexion;
 import controler.rol;
 import java.sql.*;
-import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -200,9 +200,19 @@ public class principal extends javax.swing.JFrame {
                 "Id User", "Id Rol", "Nombre", "Activo"
             }
         ));
+        TablaUser.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TablaUserMouseClicked(evt);
+            }
+        });
         jScrollPane5.setViewportView(TablaUser);
 
         BtnCrear.setText("Crear");
+        BtnCrear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnCrearActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -211,16 +221,16 @@ public class principal extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 735, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(36, 36, 36)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGap(10, 10, 10)
                                 .addComponent(BtnCrear))
-                            .addComponent(jLabel4))))
-                .addContainerGap(32, Short.MAX_VALUE))
+                            .addComponent(jLabel4)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 735, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -246,6 +256,11 @@ public class principal extends javax.swing.JFrame {
         });
 
         BtnEditar.setText("Editar");
+        BtnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnEditarActionPerformed(evt);
+            }
+        });
 
         BtnEliminar.setText("Eliminar");
 
@@ -256,6 +271,9 @@ public class principal extends javax.swing.JFrame {
         jLabel8.setText("Rol");
 
         jLabel9.setText("Activo");
+
+        TxtId.setEditable(false);
+        TxtId.setEnabled(false);
 
         SiRadioButton.setText("Si");
         SiRadioButton.addActionListener(new java.awt.event.ActionListener() {
@@ -354,13 +372,14 @@ public class principal extends javax.swing.JFrame {
                                 .addContainerGap()
                                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(168, 168, 168)
-                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
                                 .addGap(24, 24, 24)
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(174, 174, 174)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -371,9 +390,8 @@ public class principal extends javax.swing.JFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -388,12 +406,30 @@ public class principal extends javax.swing.JFrame {
     }//GEN-LAST:event_SiRadioButtonActionPerformed
 
     private void BtnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnGuardarActionPerformed
-        // TODO add your handling code here:
+        Guardar();
+        Limpiar();
+        Listar();
     }//GEN-LAST:event_BtnGuardarActionPerformed
 
     private void ComboDavidActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboDavidActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_ComboDavidActionPerformed
+
+    private void TablaUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaUserMouseClicked
+
+    }//GEN-LAST:event_TablaUserMouseClicked
+
+    private void BtnCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCrearActionPerformed
+        BtnEditar.setEnabled(false);
+        BtnEditar.setVisible(false);
+        BtnEliminar.setEnabled(false);
+        BtnEliminar.setVisible(false);
+
+    }//GEN-LAST:event_BtnCrearActionPerformed
+
+    private void BtnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEditarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BtnEditarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -431,7 +467,8 @@ public class principal extends javax.swing.JFrame {
     }
 
     void Listar() {
-        String sql = "SELECT usuario.ID_USUARIO, rol.NOMBRE, usuario.NOMBRE, usuario.ACTIVO FROM usuario inner join rol on rol.ID_ROL = usuario.ID_ROL;";
+        String sql = "SELECT usuario.ID_USUARIO, rol.NOMBRE, usuario.NOMBRE,"
+                + "usuario.ACTIVO FROM usuario inner join rol on rol.ID_ROL = usuario.ID_ROL order by ID_USUARIO asc";
         try {
             cn = conDavid.ConexionDavid();
             st = cn.createStatement();
@@ -444,10 +481,11 @@ public class principal extends javax.swing.JFrame {
                 usuario[2] = rs.getString("usuario.NOMBRE");
                 usuario[3] = rs.getString("ACTIVO");
                 modelo.addRow(usuario);
-                cn.close();
             }
             TablaUser.setModel(modelo);
+            cn.close();
         } catch (Exception e) {
+            System.err.print(e.toString());
         }
     }
 
@@ -483,6 +521,8 @@ public class principal extends javax.swing.JFrame {
 
     void RellenarCombo() {
         //ArrayList<rol>rolArray=new ArrayList();
+        ComboDavid.addItem("Seleccionar...");
+
         try {
             cn = conDavid.ConexionDavid();
             String scriptbd = "select ID_ROL,NOMBRE from ROL";
@@ -493,11 +533,55 @@ public class principal extends javax.swing.JFrame {
             while (rs.next()) {
                 ComboDavid.addItem(new rol(rs.getInt("ID_ROL"), rs.getString("NOMBRE")));
             }
-            
+
             cn.close();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Error" + e.toString());
         }
+    }
+
+    void limpiarTabla() {
+        for (int i = 0; i <= TablaUser.getRowCount(); i++) {
+            modelo.removeRow(i);
+            i = i - 1;
+        }
+    }
+
+    void Guardar() {
+        String nombre = TxtNombre.getText();
+        int rol = ComboDavid.getSelectedIndex();
+        String activo = "";
+
+        if (SiRadioButton.isSelected() == true) {
+            activo = "Si";
+        }
+        if (NoRadioButton.isSelected() == true) {
+            activo = "No";
+        }
+
+        if (nombre.equals("") || activo.equals("") || rol == 0) {
+            JOptionPane.showMessageDialog(null, "Datos vacios !!!");
+        } else {
+            try {
+                String sql = "insert into USUARIO(ID_ROL,NOMBRE,ACTIVO)values('" + rol + "','" + nombre + "','" + activo + "')";
+                cn = conDavid.ConexionDavid();
+                st = cn.createStatement();
+                st.executeUpdate(sql);
+                JOptionPane.showMessageDialog(null, "Usuario Agregado !!!");
+                limpiarTabla();
+            } catch (Exception e) {
+            }
+        }
+
+    }
+
+    void Limpiar() {
+
+        TxtId.setText("");
+        TxtNombre.setText("");
+        ComboDavid.setSelectedItem(null);
+        SiRadioButton.setSelected(false);
+        NoRadioButton.setSelected(false);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
