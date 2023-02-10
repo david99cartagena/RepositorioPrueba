@@ -221,11 +221,9 @@ public class principal extends javax.swing.JFrame {
                 .addGroup(PanelListaUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PanelListaUserLayout.createSequentialGroup()
                         .addGap(36, 36, 36)
-                        .addGroup(PanelListaUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(PanelListaUserLayout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addComponent(BtnCrear))
-                            .addComponent(jLabel4)))
+                        .addComponent(jLabel4)
+                        .addGap(18, 18, 18)
+                        .addComponent(BtnCrear))
                     .addGroup(PanelListaUserLayout.createSequentialGroup()
                         .addGap(26, 26, 26)
                         .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 735, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -235,11 +233,11 @@ public class principal extends javax.swing.JFrame {
             PanelListaUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelListaUserLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel4)
+                .addGroup(PanelListaUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(BtnCrear))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(BtnCrear)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -403,8 +401,8 @@ public class principal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(PanelBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(PanelListaUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                .addComponent(PanelListaUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(PanelInformacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -432,6 +430,8 @@ public class principal extends javax.swing.JFrame {
     private void TablaUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaUserMouseClicked
         PanelInformacion.setVisible(true);
         BtnGuardar.setVisible(false);
+        BtnEditar.setVisible(true);
+        BtnEliminar.setVisible(true);
         
         int fila = TablaUser.getSelectedRow();
         int idusuario = Integer.parseInt((String) TablaUser.getValueAt(fila, 0).toString());
@@ -457,16 +457,17 @@ public class principal extends javax.swing.JFrame {
 
     private void BtnCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCrearActionPerformed
         PanelInformacion.setVisible(true);
-        BtnEditar.setEnabled(false);
+        BtnCrear.setVisible(true);   
+        BtnGuardar.setVisible(true); 
         BtnEditar.setVisible(false);
-        BtnEliminar.setEnabled(false);
         BtnEliminar.setVisible(false);
-
+       Limpiar();
     }//GEN-LAST:event_BtnCrearActionPerformed
 
     private void BtnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEditarActionPerformed
         Editar();
         Limpiar();
+        limpiarTabla();
         Listar();
     }//GEN-LAST:event_BtnEditarActionPerformed
 
@@ -481,11 +482,8 @@ public class principal extends javax.swing.JFrame {
     private void BtnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEliminarActionPerformed
         
         Eliminar();
-        JOptionPane.showMessageDialog(null, "vamos bien !!!");
         Limpiar();
-        JOptionPane.showMessageDialog(null, "vamos bien !!!");
-        
-        //limpiarTabla();
+        limpiarTabla();
         Listar();
     }//GEN-LAST:event_BtnEliminarActionPerformed
 
@@ -551,13 +549,16 @@ public class principal extends javax.swing.JFrame {
     void Editar() {
 
         int fila = TablaUser.getSelectedRow();
-        int idusuario = Integer.parseInt((TxtId.getText()));
-
         if (fila == -1) {
             JOptionPane.showMessageDialog(null, "Usuario no seleccionado");
         } else {
-
+            int idusuario = Integer.parseInt((TxtId.getText()));
             int idrolnuevo = ComboDavid.getSelectedIndex();
+            //Error de rol= 0 obvio no esta en la base de datos cuando es administrador
+            System.out.println(idrolnuevo);
+            System.out.println(idrolnuevo);
+            System.out.println(idrolnuevo);
+            System.out.println(idrolnuevo);
             String nombrenuevo = TxtNombre.getText();
 
             String activonuevo = "";
@@ -580,7 +581,7 @@ public class principal extends javax.swing.JFrame {
             st = cn.createStatement();
             st.executeUpdate(sql);
             JOptionPane.showMessageDialog(null, "Usuario Actualizado !!!");
-            limpiarTabla();
+            cn.close();
         } catch (Exception e) {
             System.err.print(e.toString());
         }
@@ -616,17 +617,17 @@ public class principal extends javax.swing.JFrame {
             st = cn.createStatement();
             st.executeUpdate(sql);
             JOptionPane.showMessageDialog(null, "Usuario Eliminado !!!");
-            //limpiarTabla();
-            
+            cn.close();
+            st.close();     
         } catch (SQLException e) {
         }
         
     }
 
     void limpiarTabla() {
-        for (int i = 0; i <= TablaUser.getRowCount(); i++) {
+        for (int i = 0; i<TablaUser.getRowCount(); i++) {
             modelo.removeRow(i);
-            i = i - 1;
+            i-=1;
         }
     }
 
