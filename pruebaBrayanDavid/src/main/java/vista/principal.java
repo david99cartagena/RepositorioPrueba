@@ -558,12 +558,11 @@ public class principal extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Usuario no seleccionado");
         } else {
             int idusuario = Integer.parseInt((TxtId.getText()));
-            int idrolnuevo = ComboDavid.getSelectedIndex();
+            
+            rol idRolNuevoRol = (rol) ComboDavid.getSelectedItem();
             //Error de rol= 0 obvio no esta en la base de datos cuando es administrador
-            System.out.println(idrolnuevo);
-            System.out.println(idrolnuevo);
-            System.out.println(idrolnuevo);
-            System.out.println(idrolnuevo);
+            System.out.println(idRolNuevoRol);
+            System.out.println(idRolNuevoRol);
             String nombrenuevo = TxtNombre.getText();
 
             String activonuevo = "";
@@ -574,7 +573,7 @@ public class principal extends javax.swing.JFrame {
                 activonuevo = "No";
             }
 
-            Actualizar(idusuario, idrolnuevo, nombrenuevo, activonuevo);
+            Actualizar(idusuario, idRolNuevoRol.getId(), nombrenuevo, activonuevo);
         }
     }
 
