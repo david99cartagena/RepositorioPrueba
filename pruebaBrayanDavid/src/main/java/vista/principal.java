@@ -205,6 +205,11 @@ public class principal extends javax.swing.JFrame {
             }
         });
         jScrollPane5.setViewportView(TablaUser);
+        if (TablaUser.getColumnModel().getColumnCount() > 0) {
+            TablaUser.getColumnModel().getColumn(1).setMinWidth(0);
+            TablaUser.getColumnModel().getColumn(1).setPreferredWidth(0);
+            TablaUser.getColumnModel().getColumn(1).setMaxWidth(0);
+        }
 
         BtnCrear.setText("Crear");
         BtnCrear.addActionListener(new java.awt.event.ActionListener() {
