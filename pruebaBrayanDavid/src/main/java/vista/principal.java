@@ -141,6 +141,11 @@ public class principal extends javax.swing.JFrame {
         BtnConsultar.setText("Consultar");
 
         BtnLimpiar.setText("Limpiar");
+        BtnLimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnLimpiarActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Nombre");
 
@@ -198,7 +203,15 @@ public class principal extends javax.swing.JFrame {
             new String [] {
                 "Id User", "Id Rol", "Nombre Rol", "Nombre", "Activo"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                true, false, true, true, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         TablaUser.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 TablaUserMouseClicked(evt);
@@ -313,36 +326,38 @@ public class principal extends javax.swing.JFrame {
             PanelInformacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelInformacionLayout.createSequentialGroup()
                 .addGap(34, 34, 34)
-                .addGroup(PanelInformacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(PanelInformacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PanelInformacionLayout.createSequentialGroup()
-                        .addComponent(BtnGuardar)
-                        .addGap(26, 26, 26)
                         .addGroup(PanelInformacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(PanelInformacionLayout.createSequentialGroup()
-                                .addComponent(BtnEditar)
-                                .addGap(30, 30, 30)
-                                .addComponent(BtnEliminar))
-                            .addComponent(TxtId, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(TxtNombre)))
+                                .addGroup(PanelInformacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(BtnGuardar)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(26, 26, 26)
+                                .addGroup(PanelInformacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(PanelInformacionLayout.createSequentialGroup()
+                                        .addComponent(BtnEditar)
+                                        .addGap(30, 30, 30)
+                                        .addComponent(BtnEliminar))
+                                    .addComponent(TxtId, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(TxtNombre))))
+                        .addContainerGap(155, Short.MAX_VALUE))
                     .addGroup(PanelInformacionLayout.createSequentialGroup()
-                        .addGap(18, 18, 18)
                         .addGroup(PanelInformacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(PanelInformacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(70, 70, 70)
                         .addGroup(PanelInformacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(PanelInformacionLayout.createSequentialGroup()
-                                .addGap(8, 8, 8)
                                 .addComponent(SiRadioButton)
                                 .addGap(18, 18, 18)
-                                .addComponent(NoRadioButton))
+                                .addComponent(NoRadioButton)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(PanelInformacionLayout.createSequentialGroup()
-                                .addGap(26, 26, 26)
-                                .addComponent(ComboDavid, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
-                .addContainerGap(155, Short.MAX_VALUE))
+                                .addComponent(ComboDavid, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))))))
         );
         PanelInformacionLayout.setVerticalGroup(
             PanelInformacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -467,6 +482,7 @@ public class principal extends javax.swing.JFrame {
         BtnEditar.setVisible(false);
         BtnEliminar.setVisible(false);
         Limpiar();
+        ComboDavid.setSelectedIndex(0);
     }//GEN-LAST:event_BtnCrearActionPerformed
 
     private void BtnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEditarActionPerformed
@@ -491,6 +507,10 @@ public class principal extends javax.swing.JFrame {
         limpiarTabla();
         Listar();
     }//GEN-LAST:event_BtnEliminarActionPerformed
+
+    private void BtnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnLimpiarActionPerformed
+        Limpiar();
+    }//GEN-LAST:event_BtnLimpiarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -671,7 +691,7 @@ public class principal extends javax.swing.JFrame {
 
         TxtId.setText("");
         TxtNombre.setText("");
-        ComboDavid.setSelectedItem(null);
+        ComboDavid.setSelectedIndex(0);
         SiRadioButton.setSelected(false);
         NoRadioButton.setSelected(false);
     }
