@@ -437,7 +437,7 @@ public class principal extends javax.swing.JFrame {
         BtnGuardar.setVisible(false);
         BtnEditar.setVisible(true);
         BtnEliminar.setVisible(true);
-        
+
         int fila = TablaUser.getSelectedRow();
         int idusuario = Integer.parseInt((String) TablaUser.getValueAt(fila, 0).toString());
         int idrol = Integer.parseInt((String) TablaUser.getValueAt(fila, 1).toString());
@@ -447,9 +447,9 @@ public class principal extends javax.swing.JFrame {
 
         TxtId.setText("" + idusuario);
         TxtNombre.setText("" + nombre);
-        ComboDavid.removeAllItems();
-        ComboDavid.addItem(new rol(idrol, nombrerol));
-        RellenarCombo();
+        //solucionando
+        ComboDavid.setSelectedIndex(idrol);
+        //solucionando
         if ("Si".equals(activo)) {
             SiRadioButton.setSelected(true);
             NoRadioButton.setSelected(false);
@@ -462,11 +462,11 @@ public class principal extends javax.swing.JFrame {
 
     private void BtnCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCrearActionPerformed
         PanelInformacion.setVisible(true);
-        BtnCrear.setVisible(true);   
-        BtnGuardar.setVisible(true); 
+        BtnCrear.setVisible(true);
+        BtnGuardar.setVisible(true);
         BtnEditar.setVisible(false);
         BtnEliminar.setVisible(false);
-       Limpiar();
+        Limpiar();
     }//GEN-LAST:event_BtnCrearActionPerformed
 
     private void BtnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEditarActionPerformed
@@ -485,7 +485,7 @@ public class principal extends javax.swing.JFrame {
     }//GEN-LAST:event_NoRadioButtonMouseClicked
 
     private void BtnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEliminarActionPerformed
-        
+
         Eliminar();
         Limpiar();
         limpiarTabla();
@@ -558,11 +558,10 @@ public class principal extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Usuario no seleccionado");
         } else {
             int idusuario = Integer.parseInt((TxtId.getText()));
-            
+
             rol idRolNuevoRol = (rol) ComboDavid.getSelectedItem();
             //Error de rol= 0 obvio no esta en la base de datos cuando es administrador
-            System.out.println(idRolNuevoRol);
-            System.out.println(idRolNuevoRol);
+            int idRolNuevo = idRolNuevoRol.getId();
             String nombrenuevo = TxtNombre.getText();
 
             String activonuevo = "";
@@ -572,12 +571,17 @@ public class principal extends javax.swing.JFrame {
             if (NoRadioButton.isSelected() == true) {
                 activonuevo = "No";
             }
-
-            Actualizar(idusuario, idRolNuevoRol.getId(), nombrenuevo, activonuevo);
+            if (nombrenuevo.equals("") || activonuevo.equals("") || idRolNuevo == 0) {
+                JOptionPane.showMessageDialog(null, "Datos vacios !!!");
+            } else {
+                Actualizar(idusuario, idRolNuevo, nombrenuevo, activonuevo);
+            }
         }
     }
 
-    void Actualizar(int idusuario, int idrol, String nombre, String activo) {
+    void Actualizar(int idusuario, int idrol, String nombre,
+             String activo
+    ) {
 
         try {
             String sql = "update Usuario set ID_ROL='" + idrol + "',NOMBRE='" + nombre + "',ACTIVO='" + activo + "' where ID_USUARIO=" + idusuario;
@@ -592,7 +596,7 @@ public class principal extends javax.swing.JFrame {
     }
 
     void RellenarCombo() {
-        
+
         try {
             cn = conDavid.ConexionDavid();
             String scriptbd = "select ID_ROL,NOMBRE from ROL";
@@ -612,9 +616,9 @@ public class principal extends javax.swing.JFrame {
     }
 
     void Eliminar() {
-        
+
         int idusuario = Integer.parseInt((TxtId.getText()));
-        
+
         try {
             cn = conDavid.ConexionDavid();
             String sql = "delete from USUARIO where ID_USUARIO=" + idusuario;
@@ -622,16 +626,16 @@ public class principal extends javax.swing.JFrame {
             st.executeUpdate(sql);
             JOptionPane.showMessageDialog(null, "Usuario Eliminado !!!");
             cn.close();
-            st.close();     
+            st.close();
         } catch (SQLException e) {
         }
-        
+
     }
 
     void limpiarTabla() {
-        for (int i = 0; i<TablaUser.getRowCount(); i++) {
+        for (int i = 0; i < TablaUser.getRowCount(); i++) {
             modelo.removeRow(i);
-            i-=1;
+            i -= 1;
         }
     }
 
@@ -671,7 +675,6 @@ public class principal extends javax.swing.JFrame {
         SiRadioButton.setSelected(false);
         NoRadioButton.setSelected(false);
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnConsultar;
     private javax.swing.JButton BtnCrear;

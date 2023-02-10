@@ -16,10 +16,6 @@ public class rol {
     public rol() {
 
     }
-    public rol(int id) {
-        this.id = id;
-    }
-
     public rol(int id, String nombre) {
         this.id = id;
         this.nombre = nombre;
