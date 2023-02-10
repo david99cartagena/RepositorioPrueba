@@ -477,6 +477,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Eliminar"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BtnEliminarActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel6">
           <Properties>
@@ -511,6 +514,7 @@
             <Property name="text" type="java.lang.String" value="Si"/>
           </Properties>
           <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="SiRadioButtonMouseClicked"/>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="SiRadioButtonActionPerformed"/>
           </Events>
         </Component>
@@ -518,6 +522,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="No"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="NoRadioButtonMouseClicked"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JComboBox" name="ComboDavid">
           <Properties>

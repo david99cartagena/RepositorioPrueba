@@ -26,14 +26,13 @@ public class principal extends javax.swing.JFrame {
     Statement st;
     ResultSet rs;
     DefaultTableModel modelo;
-    
 
     public principal() {
         initComponents();
         Listar();
+        ComboDavid.addItem("Seleccionar...");
         RellenarCombo();
         PanelInformacion.setVisible(false);
-        
     }
 
     /**
@@ -263,6 +262,11 @@ public class principal extends javax.swing.JFrame {
         });
 
         BtnEliminar.setText("Eliminar");
+        BtnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnEliminarActionPerformed(evt);
+            }
+        });
 
         jLabel6.setText("ID");
 
@@ -276,6 +280,11 @@ public class principal extends javax.swing.JFrame {
         TxtId.setEnabled(false);
 
         SiRadioButton.setText("Si");
+        SiRadioButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                SiRadioButtonMouseClicked(evt);
+            }
+        });
         SiRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 SiRadioButtonActionPerformed(evt);
@@ -283,6 +292,11 @@ public class principal extends javax.swing.JFrame {
         });
 
         NoRadioButton.setText("No");
+        NoRadioButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                NoRadioButtonMouseClicked(evt);
+            }
+        });
 
         ComboDavid.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -417,7 +431,28 @@ public class principal extends javax.swing.JFrame {
 
     private void TablaUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaUserMouseClicked
         PanelInformacion.setVisible(true);
-        Editar();
+        BtnGuardar.setVisible(false);
+        
+        int fila = TablaUser.getSelectedRow();
+        int idusuario = Integer.parseInt((String) TablaUser.getValueAt(fila, 0).toString());
+        int idrol = Integer.parseInt((String) TablaUser.getValueAt(fila, 1).toString());
+        String nombrerol = (String) TablaUser.getValueAt(fila, 2);
+        String nombre = (String) TablaUser.getValueAt(fila, 3);
+        String activo = (String) TablaUser.getValueAt(fila, 4);
+
+        TxtId.setText("" + idusuario);
+        TxtNombre.setText("" + nombre);
+        ComboDavid.removeAllItems();
+        ComboDavid.addItem(new rol(idrol, nombrerol));
+        RellenarCombo();
+        if ("Si".equals(activo)) {
+            SiRadioButton.setSelected(true);
+            NoRadioButton.setSelected(false);
+        } else {
+            NoRadioButton.setSelected(true);
+            SiRadioButton.setSelected(false);
+        }
+
     }//GEN-LAST:event_TablaUserMouseClicked
 
     private void BtnCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCrearActionPerformed
@@ -430,8 +465,29 @@ public class principal extends javax.swing.JFrame {
     }//GEN-LAST:event_BtnCrearActionPerformed
 
     private void BtnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEditarActionPerformed
-        // TODO add your handling code here:
+        Editar();
+        Limpiar();
+        Listar();
     }//GEN-LAST:event_BtnEditarActionPerformed
+
+    private void SiRadioButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SiRadioButtonMouseClicked
+        NoRadioButton.setSelected(false);
+    }//GEN-LAST:event_SiRadioButtonMouseClicked
+
+    private void NoRadioButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_NoRadioButtonMouseClicked
+        SiRadioButton.setSelected(false);
+    }//GEN-LAST:event_NoRadioButtonMouseClicked
+
+    private void BtnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEliminarActionPerformed
+        
+        Eliminar();
+        JOptionPane.showMessageDialog(null, "vamos bien !!!");
+        Limpiar();
+        JOptionPane.showMessageDialog(null, "vamos bien !!!");
+        
+        //limpiarTabla();
+        Listar();
+    }//GEN-LAST:event_BtnEliminarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -495,40 +551,43 @@ public class principal extends javax.swing.JFrame {
     void Editar() {
 
         int fila = TablaUser.getSelectedRow();
+        int idusuario = Integer.parseInt((TxtId.getText()));
+
         if (fila == -1) {
             JOptionPane.showMessageDialog(null, "Usuario no seleccionado");
         } else {
-            int idusuario = Integer.parseInt((String) TablaUser.getValueAt(fila, 0).toString());
-            int idrol = Integer.parseInt((String) TablaUser.getValueAt(fila, 1).toString());
-            String nombrerol = (String) TablaUser.getValueAt(fila, 2);
-            String nombre = (String) TablaUser.getValueAt(fila, 3);
-            String activo = (String) TablaUser.getValueAt(fila, 4);
 
-            TxtId.setText("" + idusuario);
-            //ComboDavid.SelectIndex=1;
-            //ComboDavid.setSelectedItem(nombrerol);
-            rol rolins = new rol();
-            rolins.setId(idrol);
-            rolins.setNombre(nombrerol);
-            ComboDavid.setSelectedItem(new rol(idrol,nombrerol));
-            
-            TxtNombre.setText("" + nombre);
+            int idrolnuevo = ComboDavid.getSelectedIndex();
+            String nombrenuevo = TxtNombre.getText();
 
-            if ("Si".equals(activo)) {
-                SiRadioButton.setSelected(true);
-                NoRadioButton.setSelected(false);
-            } else {
-                NoRadioButton.setSelected(true);
-                SiRadioButton.setSelected(false);
+            String activonuevo = "";
+            if (SiRadioButton.isSelected() == true) {
+                activonuevo = "Si";
+            }
+            if (NoRadioButton.isSelected() == true) {
+                activonuevo = "No";
             }
 
+            Actualizar(idusuario, idrolnuevo, nombrenuevo, activonuevo);
+        }
+    }
+
+    void Actualizar(int idusuario, int idrol, String nombre, String activo) {
+
+        try {
+            String sql = "update Usuario set ID_ROL='" + idrol + "',NOMBRE='" + nombre + "',ACTIVO='" + activo + "' where ID_USUARIO=" + idusuario;
+            cn = conDavid.ConexionDavid();
+            st = cn.createStatement();
+            st.executeUpdate(sql);
+            JOptionPane.showMessageDialog(null, "Usuario Actualizado !!!");
+            limpiarTabla();
+        } catch (Exception e) {
+            System.err.print(e.toString());
         }
     }
 
     void RellenarCombo() {
-        //ArrayList<rol>rolArray=new ArrayList();
-        ComboDavid.addItem("Seleccionar...");
-
+        
         try {
             cn = conDavid.ConexionDavid();
             String scriptbd = "select ID_ROL,NOMBRE from ROL";
@@ -544,6 +603,24 @@ public class principal extends javax.swing.JFrame {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Error" + e.toString());
         }
+
+    }
+
+    void Eliminar() {
+        
+        int idusuario = Integer.parseInt((TxtId.getText()));
+        
+        try {
+            cn = conDavid.ConexionDavid();
+            String sql = "delete from USUARIO where ID_USUARIO=" + idusuario;
+            st = cn.createStatement();
+            st.executeUpdate(sql);
+            JOptionPane.showMessageDialog(null, "Usuario Eliminado !!!");
+            //limpiarTabla();
+            
+        } catch (SQLException e) {
+        }
+        
     }
 
     void limpiarTabla() {
