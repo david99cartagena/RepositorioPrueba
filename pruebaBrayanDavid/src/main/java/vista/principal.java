@@ -558,19 +558,15 @@ public class principal extends javax.swing.JFrame {
             cn = conDavid.ConexionDavid();
             PreparedStatement pstmt = cn.prepareStatement(sql);
             rs = pstmt.executeQuery();
-            Object objeto = new usuario();
-
+            Object[] usuario = new Object[5];
             modelo = (DefaultTableModel) TablaUser.getModel();
             while (rs.next()) {
-                usu.setIdusuario(rs.getInt("ID_USUARIO"));
-                usu.setIdrol(rs.getInt("rol.ID_ROL"));
-                usu.setNombre(rs.getString("rol.NOMBRE"));
-                usu.setNombrerol(rs.getString("usuario.NOMBRE"));
-                usu.setActivo(rs.getString("ACTIVO"));
-                objeto = usu;
-                //error con casteo entre obejto y vector
-                modelo.addRow();
-                
+                usuario[0] = rs.getInt("ID_USUARIO");
+                usuario[1] = rs.getString("rol.ID_ROL");
+                usuario[2] = rs.getString("rol.NOMBRE");
+                usuario[3] = rs.getString("usuario.NOMBRE");
+                usuario[4] = rs.getString("ACTIVO");
+                modelo.addRow(usuario);
             }
             TablaUser.setModel(modelo);
             pstmt.close();
