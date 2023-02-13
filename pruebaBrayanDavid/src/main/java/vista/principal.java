@@ -6,7 +6,9 @@ package vista;
 
 import config.conexion;
 import controler.rol;
+import controler.usuario;
 import java.sql.*;
+import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
@@ -21,6 +23,7 @@ public class principal extends javax.swing.JFrame {
      * Creates new form principal
      */
     conexion conDavid = new conexion();
+    usuario usu = new usuario();
 
     Connection cn;
     Statement st;
@@ -550,22 +553,29 @@ public class principal extends javax.swing.JFrame {
     void Listar() {
         String sql = "SELECT usuario.ID_USUARIO, rol.ID_ROL, rol.NOMBRE, usuario.NOMBRE,"
                 + "usuario.ACTIVO FROM usuario inner join rol on rol.ID_ROL = usuario.ID_ROL order by ID_USUARIO asc";
+
         try {
             cn = conDavid.ConexionDavid();
-            st = cn.createStatement();
-            rs = st.executeQuery(sql);
-            Object[] usuario = new Object[5];
+            PreparedStatement pstmt = cn.prepareStatement(sql);
+            rs = pstmt.executeQuery();
+            Object objeto = new usuario();
+
             modelo = (DefaultTableModel) TablaUser.getModel();
             while (rs.next()) {
-                usuario[0] = rs.getInt("ID_USUARIO");
-                usuario[1] = rs.getString("rol.ID_ROL");
-                usuario[2] = rs.getString("rol.NOMBRE");
-                usuario[3] = rs.getString("usuario.NOMBRE");
-                usuario[4] = rs.getString("ACTIVO");
-                modelo.addRow(usuario);
+                usu.setIdusuario(rs.getInt("ID_USUARIO"));
+                usu.setIdrol(rs.getInt("rol.ID_ROL"));
+                usu.setNombre(rs.getString("rol.NOMBRE"));
+                usu.setNombrerol(rs.getString("usuario.NOMBRE"));
+                usu.setActivo(rs.getString("ACTIVO"));
+                objeto = usu;
+                //error con casteo entre obejto y vector
+                modelo.addRow();
+                
             }
             TablaUser.setModel(modelo);
+            pstmt.close();
             cn.close();
+            rs.close();
         } catch (Exception e) {
             System.err.print(e.toString());
         }
@@ -594,35 +604,38 @@ public class principal extends javax.swing.JFrame {
             if (nombrenuevo.equals("") || activonuevo.equals("") || idRolNuevo == 0) {
                 JOptionPane.showMessageDialog(null, "Datos vacios !!!");
             } else {
-                Actualizar(idusuario, idRolNuevo, nombrenuevo, activonuevo);
+                Actualizar(new usuario(idusuario, idRolNuevo, nombrenuevo, activonuevo));
             }
         }
     }
 
-    void Actualizar(int idusuario, int idrol, String nombre,
-             String activo
-    ) {
-
+    void Actualizar(usuario usua) {
+        String sql = "update Usuario set ID_ROL=?,NOMBRE=?,ACTIVO=? where ID_USUARIO=?";
         try {
-            String sql = "update Usuario set ID_ROL='" + idrol + "',NOMBRE='" + nombre + "',ACTIVO='" + activo + "' where ID_USUARIO=" + idusuario;
+
             cn = conDavid.ConexionDavid();
-            st = cn.createStatement();
-            st.executeUpdate(sql);
+            PreparedStatement pstmt = cn.prepareStatement(sql);
+            pstmt.setInt(1, usu.getIdrol());
+            pstmt.setString(2, usu.getNombre());
+            pstmt.setString(3, usu.getActivo());
+            pstmt.setInt(4, usu.getIdusuario());
+            pstmt.executeUpdate();
+
             JOptionPane.showMessageDialog(null, "Usuario Actualizado !!!");
+            pstmt.close();
             cn.close();
+            rs.close();
         } catch (Exception e) {
             System.err.print(e.toString());
         }
     }
 
     void RellenarCombo() {
-
+        String scriptbd = "select ID_ROL,NOMBRE from ROL";
         try {
             cn = conDavid.ConexionDavid();
-            String scriptbd = "select ID_ROL,NOMBRE from ROL";
-            st = cn.createStatement();
-            rs = st.executeQuery(scriptbd);
-            ResultSet rs = st.executeQuery(scriptbd);
+            PreparedStatement pstmt = cn.prepareStatement(scriptbd);
+            rs = pstmt.executeQuery();
 
             while (rs.next()) {
                 ComboDavid.addItem(new rol(rs.getInt("ID_ROL"), rs.getString("NOMBRE")));
@@ -638,15 +651,17 @@ public class principal extends javax.swing.JFrame {
     void Eliminar() {
 
         int idusuario = Integer.parseInt((TxtId.getText()));
-
+        String sql = "delete from USUARIO where ID_USUARIO=?";
         try {
             cn = conDavid.ConexionDavid();
-            String sql = "delete from USUARIO where ID_USUARIO=" + idusuario;
-            st = cn.createStatement();
-            st.executeUpdate(sql);
+            PreparedStatement pstmt = cn.prepareStatement(sql);
+            pstmt.setInt(1, idusuario);
+            pstmt.executeUpdate();
             JOptionPane.showMessageDialog(null, "Usuario Eliminado !!!");
+            pstmt.close();
             cn.close();
-            st.close();
+            rs.close();
+
         } catch (SQLException e) {
         }
 
@@ -674,11 +689,17 @@ public class principal extends javax.swing.JFrame {
         if (nombre.equals("") || activo.equals("") || rol == 0) {
             JOptionPane.showMessageDialog(null, "Datos vacios !!!");
         } else {
+            String sql = "insert into USUARIO(ID_ROL,NOMBRE,ACTIVO)values(?,?,?)";
             try {
-                String sql = "insert into USUARIO(ID_ROL,NOMBRE,ACTIVO)values('" + rol + "','" + nombre + "','" + activo + "')";
                 cn = conDavid.ConexionDavid();
-                st = cn.createStatement();
-                st.executeUpdate(sql);
+                PreparedStatement pstmt = cn.prepareStatement(sql);
+                pstmt.setInt(1, rol);
+                pstmt.setString(2, nombre);
+                pstmt.setString(3, activo);
+                pstmt.executeUpdate();
+                pstmt.close();
+                cn.close();
+                rs.close();
                 JOptionPane.showMessageDialog(null, "Usuario Agregado !!!");
                 limpiarTabla();
             } catch (Exception e) {
