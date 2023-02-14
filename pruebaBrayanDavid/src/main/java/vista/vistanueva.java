@@ -7,7 +7,7 @@ package vista;
 /**
  *
  * @author Pc_Estiven
- */
+ */ cometario brayan rama de david
 public class vistanueva {
     
 }
