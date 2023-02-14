@@ -6,7 +6,7 @@ package config;
 
 /**
  *
- * @author serdn crece rama
+ * @author serdn crece rama cre mas
  */
 public class ramaBrayan {
     
