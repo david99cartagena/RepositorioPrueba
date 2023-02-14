@@ -142,6 +142,11 @@ public class principal extends javax.swing.JFrame {
         jLabel2.setText("Parametros de Busqueda");
 
         BtnConsultar.setText("Consultar");
+        BtnConsultar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnConsultarActionPerformed(evt);
+            }
+        });
 
         BtnLimpiar.setText("Limpiar");
         BtnLimpiar.addActionListener(new java.awt.event.ActionListener() {
@@ -174,7 +179,7 @@ public class principal extends javax.swing.JFrame {
                         .addGap(33, 33, 33)
                         .addGroup(PanelBusquedaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(BtnLimpiar)
-                            .addComponent(TxtBuscarNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(TxtBuscarNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         PanelBusquedaLayout.setVerticalGroup(
@@ -515,6 +520,13 @@ public class principal extends javax.swing.JFrame {
         Limpiar();
     }//GEN-LAST:event_BtnLimpiarActionPerformed
 
+    private void BtnConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnConsultarActionPerformed
+        String buscarpersona = TxtBuscarNombre.getText();
+        String nuevo = "%"+buscarpersona+"%";
+        Consultar(nuevo);
+        Limpiar();
+    }//GEN-LAST:event_BtnConsultarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -548,6 +560,42 @@ public class principal extends javax.swing.JFrame {
                 new principal().setVisible(true);
             }
         });
+    }
+
+    void Consultar(String buscarNombre) {
+
+        String sql = "SELECT usuario.ID_USUARIO, rol.ID_ROL, rol.NOMBRE, usuario.NOMBRE,"
+                + "usuario.ACTIVO FROM usuario inner join rol on rol.ID_ROL = usuario.ID_ROL "
+                + "where usuario.nombre LIKE ?";
+
+        try {
+            cn = conDavid.ConexionDavid();
+            PreparedStatement pstmt = cn.prepareStatement(sql);
+            System.out.println(buscarNombre);
+            
+            pstmt.setString(1, buscarNombre);
+            rs = pstmt.executeQuery();
+            Object[] usuario = new Object[5];
+            modelo = (DefaultTableModel) TablaUser.getModel();
+            limpiarTabla();
+            while (rs.next()) {
+                usuario[0] = rs.getInt("ID_USUARIO");
+                usuario[1] = rs.getString("rol.ID_ROL");
+                usuario[2] = rs.getString("rol.NOMBRE");
+                usuario[3] = rs.getString("usuario.NOMBRE");
+                usuario[4] = rs.getString("ACTIVO");
+                modelo.addRow(usuario);
+            }
+            TablaUser.setModel(modelo);
+            pstmt.close();
+            cn.close();
+            JOptionPane.showMessageDialog(null, "Filtro Exitoso");
+            rs.close();
+            
+        } catch (Exception e) {
+            System.err.print(e.toString());
+        }
+
     }
 
     void Listar() {
@@ -705,7 +753,8 @@ public class principal extends javax.swing.JFrame {
     }
 
     void Limpiar() {
-
+        
+        TxtBuscarNombre.setText("");
         TxtId.setText("");
         TxtNombre.setText("");
         ComboDavid.setSelectedIndex(0);
